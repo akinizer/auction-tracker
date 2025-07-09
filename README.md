@@ -1,25 +1,27 @@
-# 🛒 Auction Tracker for Pokémon Revolution Online
+# Auction Price Tracker
 
-This project scrapes auction listings from the Pokémon Revolution Online forum and displays them in a searchable, filterable web interface using **Next.js** and **SQLite**.
-
----
-
-## 📦 Features
-
-- Fetches all auction pages automatically
-- Stores listings in a local SQLite database
-- Web UI for:
-  - Keyword search
-  - Min/max price filter
-  - Server selection (Gold / Silver)
-- Displays total number of pages and results
+A web-based tool that scrapes Pokémon Revolution Online forum auction listings and displays them in a searchable table.
 
 ---
 
-## 🛠 Setup Instructions
+## Features
 
-### 1. Clone the Repository
+- Scrapes auction listings from all pages of the [Selling Pokémon Cross Server](https://pokemonrevolution.net/forum/forum/211-selling-pok%C3%A9mon-cross-server/) forum.
+- Stores listings in an SQLite database.
+- Provides a web UI to:
+  - Search auction titles
+  - Filter by price range
+  - Filter by server (Gold/Silver)
+- Displays number of results and pages fetched
+
+---
+
+## Getting Started
 
 ```bash
 git clone https://github.com/your-username/auction-tracker.git
 cd auction-tracker
+npm install
+node scripts/init.js
+npm run scrape
+npm run dev
