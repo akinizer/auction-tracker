@@ -7,7 +7,10 @@ db.serialize(() => {
     title TEXT,
     price INTEGER,
     date TEXT,
-    server TEXT
+    server TEXT,
+    min_price INTEGER,
+    max_price INTEGER,
+    end_date TEXT
   )`);
 });
 

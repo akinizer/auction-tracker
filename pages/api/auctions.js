@@ -1,9 +1,8 @@
-import sqlite3 from 'sqlite3';
-
+const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./db/auctions.db');
 
 export default function handler(req, res) {
-  const { q = '', min = '', max = '', server = '' } = req.query;
+  const { q = '', min = '', max = '', server = '', dateFrom = '', dateTo = '', category = '' } = req.query;
 
   let whereClause = ' WHERE 1=1';
   const params = [];
@@ -21,11 +20,24 @@ export default function handler(req, res) {
     params.push(max);
   }
   if (server) {
-    whereClause += ' AND server = ?';
-    params.push(server);
+    if (server.toLowerCase() !== 'all') {
+      whereClause += ' AND server = ?';
+      params.push(server);
+    }
+  }
+  if (dateFrom) {
+    whereClause += ' AND date >= ?';
+    params.push(dateFrom);
+  }
+  if (dateTo) {
+    whereClause += ' AND date <= ?';
+    params.push(dateTo);
+  }
+  if (category && category !== 'all') {
+    whereClause += ' AND category = ?';
+    params.push(category);
   }
 
-  // First get total count
   db.get(`SELECT COUNT(*) as count FROM auctions${whereClause}`, params, (err, countRow) => {
     if (err) {
       console.error('DB count error:', err);
@@ -33,14 +45,13 @@ export default function handler(req, res) {
     }
     const count = countRow.count;
 
-    // Then get all rows (or add LIMIT/OFFSET if needed)
     db.all(`SELECT * FROM auctions${whereClause} ORDER BY date DESC`, params, (err, rows) => {
       if (err) {
         console.error('DB rows error:', err);
         return res.status(500).json({ error: 'Database error' });
       }
-      // Respond with count and rows
       res.status(200).json({ count, rows });
     });
   });
+
 }
